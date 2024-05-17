@@ -2,8 +2,13 @@ package ac.su.inclassspringsecurity.service;
 
 import ac.su.inclassspringsecurity.constant.ProductStatusEnum;
 import ac.su.inclassspringsecurity.domain.Product;
+import ac.su.inclassspringsecurity.domain.QProduct;
 import ac.su.inclassspringsecurity.repository.ProductRepository;
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,7 +23,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public List<Product> getAllProducts() {
-       return productRepository.findAll();
+        return productRepository.findAll();
     }
 
     public Optional<Product> getProductById(long id) {
@@ -58,9 +63,39 @@ public class ProductService {
     }
 
     public Product updateProduct(long id, Product product) {
-        if (productRepository.findById(id).isEmpty()) {
-            return productRepository.save(product);
+        if (!productRepository.existsById(id)) {
+            return null;
+            //없었던 id인 경우 null
         }
-    return null;
+        //기존에 존재하는 레코드 업데이트
+        product.setId(id);
+        return productRepository.save(product);
     }
+
+    public boolean deleteProduct(long id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public List<Product> getProductsPage(int page, int size) {
+        // 페이징 처리를 적용하여 상품 리스트 조회
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> productPage = productRepository.findAll(pageable);
+        // 조회된 상품 출력
+        return productPage.getContent();
+    }
+
+//    public Product updateProductPatch(long id, Product product){
+//        if(!productRepository.existsById(id)) {
+//            return null;
+//            //없었던 id인 경우 null
+//        }
+//        if(productRepository.findById(id).isPresent()) {
+//            Product recordto
+//        }
+//    }
+
 }

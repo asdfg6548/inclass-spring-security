@@ -28,6 +28,15 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+    @GetMapping("/paginated")
+    public ResponseEntity<List<Product>> getProductsPage( // 파라미터 미수신 경우 기본 값 지정
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size",required = false,defaultValue = "15") int size
+    ){
+        List<Product> products = productService.getProductsPage(page,size);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") long id) {
         Optional<Product> product = productService.getProductById(id);
@@ -58,6 +67,15 @@ public class ProductController {
         }
         Product createdProduct = productService.createProduct(product);
         return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") long id){
+        boolean isDeleted=productService.deleteProduct(id);
+        if(isDeleted){
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/make-dummy")

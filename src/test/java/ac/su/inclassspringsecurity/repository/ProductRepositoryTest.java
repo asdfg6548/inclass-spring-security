@@ -2,10 +2,15 @@ package ac.su.inclassspringsecurity.repository;
 
 import ac.su.inclassspringsecurity.constant.ProductStatusEnum;
 import ac.su.inclassspringsecurity.domain.Product;
+import ac.su.inclassspringsecurity.domain.QProduct;
+import com.querydsl.core.BooleanBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.context.TestPropertySource;
 
@@ -100,6 +105,26 @@ class ProductRepositoryTest {
         List<Product> inStockProductList = productRepository.findByStatusList(
                 List.of(ProductStatusEnum.PREPARING, ProductStatusEnum.IN_STOCK));
         inStockProductList.forEach(System.out::println);
+    }
+
+    // 6) Predicate Boolean Builder & Pageable 을 사용해 상품 조회
+    @Test
+    @DisplayName("상품 페이징 조회 테스트")
+    public void readWithPagination() {
+        // 상품 10 개의 더미 데이터 생성 후 저장
+        createList();
+
+        // Boolean Builder 를 사용해 상품 가격이 5000 이상 10000 이하인 상품 리스트 조회
+        BooleanBuilder predicate = new BooleanBuilder();
+        predicate.and(QProduct.product.price.between(5000, 10000));
+
+        // 페이징 처리를 적용해 상품 리스트 조회
+        Pageable pageable = PageRequest.of(0, 3);
+        Page<Product> productPage = productRepository.findAll(predicate, pageable);
+        List<Product> productList = productPage.getContent();
+
+        // 조회된 상품 출력
+        productList.forEach(System.out::println);
     }
 
 }
