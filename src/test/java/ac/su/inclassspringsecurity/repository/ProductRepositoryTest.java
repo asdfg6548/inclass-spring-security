@@ -58,6 +58,9 @@ class ProductRepositoryTest {
             }
             product.setCreatedAt(String.valueOf(LocalDateTime.now()));
             product.setUpdatedAt(String.valueOf(LocalDateTime.now()));
+            product.setDescription("상세정보를 입력합니다");
+            product.setMemo("메모 입력");
+            product.setImage("/static/path/to/image");
             productList.add(product);
         }
         // 상품 리스트 저장 및 확인
@@ -77,7 +80,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("상품 이름으로 조회 테스트")
+    @DisplayName("상품 상태로 조회 테스트")
     public void readByStatus() {
         // 상품 10 개의 더미 데이터 생성 후 저장
         createList();
