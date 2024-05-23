@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>상품리스트 페이지</title>
+    <style>
+        .bg-danger {
+            background-color: lightcoral;
+        }
+        .bg-info {
+            background-color: lightgreen;
+        }
+    </style>
 </head>
 <body>
 <!--<div th:each="product:${products}">-->
@@ -19,7 +27,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="product:${products}">
+    <tr th:each="product:${products}"
+        th:class="${product.status.name().contentEquals('SOLD_OUT')}?'bg-danger':'bg-info'">
         <td th:if="${product.status.name().contentEquals('SOLD_OUT')}" th:text="매진"></td>
         <td th:unless="${product.status.name().contentEquals('SOLD_OUT')}" th:text="정상"></td>
         <td th:text="${product.name}"></td>
