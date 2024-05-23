@@ -36,4 +36,10 @@ public class ProductTempController {
         model.addAttribute("products",products);
         return "thymeleaf/product-page";
     }
+
+    @GetMapping("/products-layout-applied")
+    public String productLayoutApplied(){
+
+        return "thymeleaf/products-layout-applied";
+    }
 }

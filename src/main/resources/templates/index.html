@@ -9,6 +9,14 @@
 </head>
     <main layout:fragment="contents">
         <h1>인덱스 페이지 입니다!</h1>
+        <a href="/products">Rest API URL 1(기본 상대경로)</a> <br>
+        <a th:href="@{/products}">Rest API URL 2(thymeleaf 상대경로)</a> <br>
+        <a href="thymeleaf/ex01">Rest API URL(상대경로)</a> <br>
+        <a href="http://localhost:8080/thymeleaf/ex01">타임리프 테스트 URL(절대경로)</a> <br>
+        <a th:href="@{thymeleaf/ex01}">타임리프 테스트 URL (th:href)</a> <br>
+        <a th:href="@{thymeleaf/product-page}">타임리프 상품목록 URL (기본값 파라미터)</a> <br>
+        <a th:href="@{thymeleaf/product-page(page='1',size='5')}">타임리프 상품목록 URL (커스텀 파라미터)</a> <br>
+
     </main>
 
 </html>
