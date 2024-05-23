@@ -88,6 +88,16 @@ public class ProductService {
         return productPage.getContent();
     }
 
+    public List<Product> getValidProductsPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        BooleanBuilder predicate = new BooleanBuilder();
+        predicate.or(QProduct.product.status.eq(ProductStatusEnum.IN_STOCK));
+        predicate.or(QProduct.product.status.eq(ProductStatusEnum.PREPARING));
+        Page<Product> productPage = productRepository.findAll(predicate, pageable);
+        return productPage.getContent();
+
+    }
+
 //    public Product updateProductPatch(long id, Product product){
 //        if(!productRepository.existsById(id)) {
 //            return null;

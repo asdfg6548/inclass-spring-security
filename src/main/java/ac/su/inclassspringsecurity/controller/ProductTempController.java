@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,5 +25,15 @@ public class ProductTempController {
         model.addAttribute("data2","Second Data");
         model.addAttribute("data3","Third Data");
         return "thymeleaf/ex01";
+    }
+
+    @GetMapping("/product-page")
+    public String productPage (Model model,
+                               @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                               @RequestParam(value = "size",required = false,defaultValue = "15") int size)
+    {
+        List<Product> products = productService.getValidProductsPage(page,size);
+        model.addAttribute("products",products);
+        return "thymeleaf/product-page";
     }
 }
