@@ -3,6 +3,7 @@ package ac.su.inclassspringsecurity.controller;
 import ac.su.inclassspringsecurity.domain.Product;
 import ac.su.inclassspringsecurity.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,14 +33,30 @@ public class ProductTempController {
                                @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                @RequestParam(value = "size",required = false,defaultValue = "15") int size)
     {
-        List<Product> products = productService.getValidProductsPage(page,size);
+        List<Product> products = productService.getValidProductsList(page,size);
         model.addAttribute("products",products);
         return "thymeleaf/product-page";
     }
 
-    @GetMapping("/products-layout-applied")
-    public String productLayoutApplied(){
+    @GetMapping("/products-layout")
+    public String productLayoutPage (Model model,
+                               @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                               @RequestParam(value = "size",required = false,defaultValue = "15") int size)
+    {
+        List<Product> products = productService.getValidProductsList(page,size);
+        model.addAttribute("products",products);
+        return "products-layout-applied";
+    }
 
-        return "thymeleaf/products-layout-applied";
+    @GetMapping("/products-pagenav")
+    public String productPageNav (Model model,
+                                     @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                     @RequestParam(value = "size",required = false,defaultValue = "15") int size)
+    {
+        Page<Product> productsPage = productService.getValidProductsPage(page,size);
+        model.addAttribute("products",productsPage);
+        model.addAttribute("pageNum",page);
+        model.addAttribute("pageSize",size);
+        return "products-pagenav";
     }
 }
