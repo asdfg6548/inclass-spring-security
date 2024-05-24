@@ -23,6 +23,10 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+
+    @Column(nullable = false)
+    private UserRole Role;
+
     @Override
     public String toString() {
         return "User{" +
@@ -34,6 +38,4 @@ public class User {
                 '}';
     }
 
-    @Column(nullable = false)
-    private UserRole Role;
 }
