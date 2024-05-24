@@ -1,0 +1,4 @@
+<div th:fragment="formGlobalErrorsFragment" class="alert alert-danger"
+     role="alert" th:if="${#fields.hasGlobalErrors()}">
+    <div th:each="err : ${#fields.globalErrors()}" th:text="${err}" />
+</div>

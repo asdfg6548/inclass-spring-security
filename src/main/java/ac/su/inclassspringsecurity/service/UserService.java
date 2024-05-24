@@ -15,17 +15,21 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void create() {
+    public void create(
+            String username,
+            String password1,
+            String email
+    ) {
         User newUser = new User();
-        newUser.setUsername("test");
+        newUser.setUsername(username);
         newUser.setPassword(
-                passwordEncoder.encode("test")
+                passwordEncoder.encode(password1)
         );
-        newUser.setEmail("test@email.com");
-        newUser.setRole(UserRole.ADMIN);
+        newUser.setEmail(email);
+        newUser.setRole(UserRole.USER);
+
         validateDuplicateUser(newUser);
         User savedUser=userRepository.save(newUser);
-        System.out.println(savedUser);
     }
 
     // 유저 중복 Validation 체크 (username, email) 후 중복 시 throw Exception
