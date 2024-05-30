@@ -3,8 +3,7 @@ package ac.su.inclassspringsecurity.domain;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Getter
-@Setter
+@Getter @Setter
 public class UserCreateForm {
     @Size(min = 3, max = 25)
     @NotEmpty(message = "사용자ID는 필수항목입니다.")

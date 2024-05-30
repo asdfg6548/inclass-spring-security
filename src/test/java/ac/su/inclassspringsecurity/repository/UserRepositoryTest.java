@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -33,6 +35,19 @@ class UserRepositoryTest {
         newUser.setRole(UserRole.ADMIN);
         User savedUser=userRepository.save(newUser);
         System.out.println(savedUser);
+    }
+
+    @Test
+    @DisplayName("email 필드 유저 검색")
+    public void findByEmail() {
+        create();
+        Optional<User> foundUser= userRepository.findByEmail("test@email.com");
+        assert foundUser.isPresent();
+        System.out.println("유저 검색 성공");
+
+        foundUser= userRepository.findByEmail("test44444@email.com");
+        assert foundUser.isEmpty();
+        System.out.println("없는 유저 검색 결과 반환");
     }
 
     @Test
@@ -69,4 +84,5 @@ class UserRepositoryTest {
         assert userRepository.existsByUsername(user.getUsername());
         assert userRepository.existsByEmail(user.getEmail());
         }
+
     }

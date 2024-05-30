@@ -1,20 +1,43 @@
 package ac.su.inclassspringsecurity.service;
 
 import ac.su.inclassspringsecurity.constant.UserRole;
+import ac.su.inclassspringsecurity.domain.SpringUser;
 import ac.su.inclassspringsecurity.domain.User;
 import ac.su.inclassspringsecurity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    //로그인 전용 메서드 Override
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> registeredUSer= userRepository.findByEmail(email);
+        if (registeredUSer.isEmpty()){
+            throw new UsernameNotFoundException(email);
+        }
+//        User foundUser = registeredUSer.get();
+//        return new SpringUser(
+//                foundUser.getUsername(),
+//                foundUser.getPassword(),
+//                new ArrayList<>()
+//        );
+        return SpringUser.getSpringUserDetails(registeredUSer.get());
+    }
+
+    //CRUD 기능 구현
     public void create(
             String username,
             String password1,
@@ -50,4 +73,6 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
+
+
 }
